@@ -22,9 +22,9 @@ namespace Pokémon
 
         private static int pokemonsInStorage = 6;
         private static string rival = "Misty";
-        private static string[] movePoolBulbasaur = new string[] {"Vine Whip", "Tackle", "Poison Powder", "Razor Leaf"};
-        private static string[] movePoolCharmander = new string[] {"Ember", "Scratch", "Fire Spin", "Fire Fang"};
-        private static string[] movePoolSquirtle = new string[] {"Water Gun", "Bubble", "Tackle", "Aqua Tail"};
+        //private static string[] movePoolBulbasaur = new string[] {"Vine Whip", "Tackle", "Poison Powder", "Razor Leaf"};
+        //private static string[] movePoolCharmander = new string[] {"Ember", "Scratch", "Fire Spin", "Fire Fang"};
+        //private static string[] movePoolSquirtle = new string[] {"Water Gun", "Bubble", "Tackle", "Aqua Tail"};
         private static int bulbasaurHP = 45;
         private static int charmanderHP = 39;
         private static int squirtleHP = 44;
@@ -98,6 +98,29 @@ namespace Pokémon
                     Console.WriteLine(rival + " Threw out Charmander");
                     Console.WriteLine("\nFIGHT!!!\n");
 
+                    Random rnd = new Random();
+                    // YOUR POKÉMON
+                    int pokemonHPStat = rnd.Next(20, 20);
+                    int pokemonAtkStat = rnd.Next(20, 20);
+                    int pokemonDefStat = rnd.Next(20, 20);
+                    int pokemonLvl = rnd.Next(5, 5);
+                    // MISTY'S POKÉMON
+                    int opponentsPokemonHPStat = rnd.Next(1, 100);
+                    int opponentsPokemonAtkStat = rnd.Next(1, 60);
+                    int opponentsPokemonDefStat = rnd.Next(1, 40);
+                    int opponentsPokemonLvl = rnd.Next(1, 100);
+
+                    // The Battle
+                    if(pokemonAtkStat >= opponentsPokemonDefStat)
+                    {
+                        Console.WriteLine("You defeated " + rival + "'s Pokémon, GOOD JOB!");
+                    }
+                    else
+                    {
+                        Console.WriteLine("YOU LOST!");
+                    }
+
+                    /*
                     Console.WriteLine("Bulbasaur has these 4 moves, what do you want to use?\n" + string.Join(", ", movePoolBulbasaur));
                     string userInputMoves = Console.ReadLine();
                     if (userInputMoves == movePoolBulbasaur[0].ToLower())
@@ -115,7 +138,7 @@ namespace Pokémon
                     else if(userInputMoves == movePoolBulbasaur[3].ToLower())
                     {
                         Console.WriteLine("Bulbasaur used " + movePoolBulbasaur[3] + ", opponent took 12 damage\n");
-                    }
+                    }*/
                 }
 
             }

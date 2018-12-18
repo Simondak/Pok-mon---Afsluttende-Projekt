@@ -183,7 +183,7 @@ namespace Pokémon
                     int foundWildPokemon = rnd.Next(1, 3);
                     if (foundWildPokemon == 1)
                     {
-                        Console.WriteLine("You Encountered A Wild " + spawnRandomPokemon);
+                        Console.WriteLine(GetRandomElementFromArray());
                     }
                 }, 30).ToList().ForEach(x => x());
             }
@@ -191,6 +191,17 @@ namespace Pokémon
         private static bool IsCatchSuccessful()
         {
             return new Random().Next(100) >= 50;
+        }
+
+        private static string GetRandomElementFromArray()
+        {
+            // Create a Random Object
+            Random rnd = new Random();
+            // Generate a random index less than the size of the array
+            int indexInArray = rnd.Next(spawnRandomPokemon.Length);
+
+            // Display result
+            return $"You Encoutered A Wild {spawnRandomPokemon[indexInArray]}";
         }
     }
 }

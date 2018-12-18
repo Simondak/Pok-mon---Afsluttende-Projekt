@@ -100,10 +100,10 @@ namespace Pokémon
 
                     Random rnd = new Random();
                     // YOUR POKÉMON
-                    int pokemonHPStat = rnd.Next(20, 20);
-                    int pokemonAtkStat = rnd.Next(20, 20);
-                    int pokemonDefStat = rnd.Next(20, 20);
-                    int pokemonLvl = rnd.Next(5, 5);
+                    int yourPokemonHPStat = rnd.Next(20, 20);
+                    int yourPokemonAtkStat = rnd.Next(20, 20);
+                    int yourPokemonDefStat = rnd.Next(20, 20);
+                    int yourPokemonLvl = rnd.Next(5, 5);
                     // MISTY'S POKÉMON
                     int opponentsPokemonHPStat = rnd.Next(1, 100);
                     int opponentsPokemonAtkStat = rnd.Next(1, 60);
@@ -111,7 +111,7 @@ namespace Pokémon
                     int opponentsPokemonLvl = rnd.Next(1, 100);
 
                     // The Battle
-                    if(pokemonAtkStat >= opponentsPokemonDefStat)
+                    if(yourPokemonAtkStat >= opponentsPokemonDefStat)
                     {
                         Console.WriteLine("You defeated " + rival + "'s Pokémon, GOOD JOB!");
                     }

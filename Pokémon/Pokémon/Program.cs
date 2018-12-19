@@ -113,7 +113,9 @@ namespace Pokémon
                     // The Battle
                     if(yourPokemonAtkStat >= opponentsPokemonDefStat)
                     {
-                        Console.WriteLine("You defeated " + rival + "'s Pokémon, GOOD JOB!");
+                        Console.WriteLine("You defeated " + rival + "'s Pokémon, GOOD JOB!\n");
+                        isRunning = true;
+                        Menu();
                     }
                     else
                     {

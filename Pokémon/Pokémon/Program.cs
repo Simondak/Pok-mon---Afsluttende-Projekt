@@ -75,8 +75,7 @@ namespace Pokémon
             Console.WriteLine("\nChoose Your Starter Pokémon!\n");
             Console.WriteLine("Bulbasaur | Charmander | Squirtle\n");
             string chooseStarter = Console.ReadLine();
-
-            if(chooseStarter == "Bulbasaur".ToLower())
+            if (chooseStarter == "Bulbasaur".ToLower())
             {
                 Console.WriteLine("\nCongratulations You Chose Bulbasaur!");
             }
@@ -91,68 +90,43 @@ namespace Pokémon
             Console.WriteLine("\nProf. Oak: OH look there's " + rival + " you need to battle her to start your adventure!");
             Console.WriteLine("\nDo You Want To Battle? Y/N");
             string userInput = Console.ReadLine();
-            if(userInput == "Y".ToLower())
+            if (userInput == "Y".ToLower())
             {
                 if (chooseStarter == "Bulbasaur".ToLower())
                 {
                     Console.WriteLine(rival + " Threw out Charmander");
                     Console.WriteLine("\nFIGHT!!!\n");
-
-                    Random rnd = new Random();
-                    // YOUR POKÉMON
-                    int yourPokemonHPStat = rnd.Next(20, 20);
-                    int yourPokemonAtkStat = rnd.Next(20, 20);
-                    int yourPokemonDefStat = rnd.Next(20, 20);
-                    int yourPokemonLvl = rnd.Next(5, 5);
-                    // MISTY'S POKÉMON
-                    int opponentsPokemonHPStat = rnd.Next(1, 100);
-                    int opponentsPokemonAtkStat = rnd.Next(1, 60);
-                    int opponentsPokemonDefStat = rnd.Next(1, 40);
-                    int opponentsPokemonLvl = rnd.Next(1, 100);
-
-                    // The Battle
-                    if(yourPokemonAtkStat >= opponentsPokemonDefStat)
+                    while(GetBattleForBulbasaur() == false)
                     {
-                        Console.WriteLine("You defeated " + rival + "'s Pokémon, GOOD JOB!\n");
-                        isRunning = true;
-                        Menu();
-                    }
-                    else
-                    {
-                        Console.WriteLine("YOU LOST!");
-                    }
-
-                    /*
-                    Console.WriteLine("Bulbasaur has these 4 moves, what do you want to use?\n" + string.Join(", ", movePoolBulbasaur));
-                    string userInputMoves = Console.ReadLine();
-                    if (userInputMoves == movePoolBulbasaur[0].ToLower())
-                    {
-                        Console.WriteLine("Bulbasaur used " + movePoolBulbasaur[0] + ", opponent took 10 damage\n");
-                    }
-                    else if (userInputMoves == movePoolBulbasaur[1].ToLower())
-                    {
-                        Console.WriteLine("Bulbasaur used " + movePoolBulbasaur[1] + ", opponent took 2 damage\n");
-                    }
-                    else if(userInputMoves == movePoolBulbasaur[2].ToLower())
-                    {
-                        Console.WriteLine("Bulbasaur used " + movePoolBulbasaur[2] + ", opponent took 6 damage\n");
-                    }
-                    else if(userInputMoves == movePoolBulbasaur[3].ToLower())
-                    {
-                        Console.WriteLine("Bulbasaur used " + movePoolBulbasaur[3] + ", opponent took 12 damage\n");
-                    }*/
+                        Console.WriteLine("Professor Oak healed Bulbasaur, take up the battle again. Type 'Y'");
+                        userInput = Console.ReadLine();
+                    }                                       
                 }
-
+                else if (chooseStarter == "Charmander".ToLower())
+                {
+                    Console.WriteLine(rival + " Threw out Squirtle");
+                    Console.WriteLine("\nFIGHT!!!\n");
+                    while(GetBattleForBulbasaur() == false)
+                    {
+                        Console.WriteLine("Professor Oak healed Bulbasaur, take up the battle again. Type 'Y'");
+                        userInput = Console.ReadLine();
+                    }
+                }
+                else if (chooseStarter == "Squirtle".ToLower())
+                {
+                    Console.WriteLine(rival + " Threw out Charmander");
+                    Console.WriteLine("\nFIGHT!!!\n");
+                    while (GetBattleForBulbasaur() == false)
+                    {
+                        Console.WriteLine("Professor Oak healed Bulbasaur, take up the battle again. Type 'Y'");
+                        userInput = Console.ReadLine();
+                    }
+                }
             }
             else
             {
                 Console.WriteLine("GAME OVER!");
             }
-            
-
-            
-            //isRunning = true;
-            //Menu();
         }
 
         public static void Menu()
@@ -226,7 +200,36 @@ namespace Pokémon
             int indexInArray = rnd.Next(spawnRandomPokemon.Length);
 
             // Display result
-            return $"You Encoutered A Wild {spawnRandomPokemon[indexInArray]}";
+            return $"You Encountered A Wild {spawnRandomPokemon[indexInArray]}";
+        }
+
+        /// *** BATTLE SYSTEM *** ///
+        private static bool GetBattleForBulbasaur()
+        {
+            Random rnd = new Random();
+            // YOUR POKÉMON
+            int yourPokemonHPStat = rnd.Next(20, 20);
+            int yourPokemonAtkStat = rnd.Next(20, 20);
+            int yourPokemonDefStat = rnd.Next(20, 20);
+            int yourPokemonLvl = rnd.Next(5, 5);
+            // MISTY'S POKÉMON
+            int opponentsPokemonHPStat = rnd.Next(1, 100);
+            int opponentsPokemonAtkStat = rnd.Next(1, 60);
+            int opponentsPokemonDefStat = rnd.Next(1, 40);
+            int opponentsPokemonLvl = rnd.Next(1, 100);
+            // The Battle
+            if (yourPokemonAtkStat >= opponentsPokemonDefStat)
+            {
+                Console.WriteLine("You defeated " + rival + "'s Pokémon, GOOD JOB!\n");
+                isRunning = true;
+                Menu();
+                return true;
+            }
+            else
+            {
+                Console.WriteLine("YOU LOST!\n");
+                return false;
+            }
         }
     }
 }

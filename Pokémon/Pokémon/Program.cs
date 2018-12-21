@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.IO;
+using MySql.Data.MySqlClient;
 
 namespace Pokémon
 {
@@ -20,14 +21,13 @@ namespace Pokémon
         private static readonly string BattleInLeagues = Choice["BattleInLeagues"];
         private static readonly string Exit = Choice["Exit"];
 
-        private static int pokemonsInStorage = 6;
+        private static int[] pokemonsInStorage = {1, 2, 3};
         private static string rival = "Misty";
         //private static string[] movePoolBulbasaur = new string[] {"Vine Whip", "Tackle", "Poison Powder", "Razor Leaf"};
         //private static string[] movePoolCharmander = new string[] {"Ember", "Scratch", "Fire Spin", "Fire Fang"};
         //private static string[] movePoolSquirtle = new string[] {"Water Gun", "Bubble", "Tackle", "Aqua Tail"};
-        private static int bulbasaurHP = 45;
-        private static int charmanderHP = 39;
-        private static int squirtleHP = 44;
+        private static string[] MistysPokemon = {"Bulbasaur", "Charmander", "Squirtle"};
+        private static string[] caughtORNot = {"Got it!", "Oh no, the Pokémon escaped!"};
         private static string[] spawnRandomPokemon = {
         "Bulbasaur", "Ivysaur", "Venusaur", "Charmander", "Charmeleon",
         "Charizard", "Squirtle", "Wartortle", "Blastoise", "Caterpie",
@@ -59,69 +59,83 @@ namespace Pokémon
         "Porygon", "Omanyte", "Omastar", "Kabuto", "Kabutops", "Aerodactyl",
         "Snorlax", "Articuno", "Zapdos", "Moltres", "Dratini", "Dragonair", "Dragonite", "Mewtwo", "Mew" };
 
-        
+        CatchPokemon cp = new CatchPokemon();
+
         static void Main(string[] args)
         {
-            string path = @"C:\Users\Ejer\Documents\ProfessorOak.txt";
-            List<string> ProfessorOaksSpeech = new List<string>(File.ReadAllLines(path, Encoding.UTF8));
 
-            int i = 0;
-            while (i < ProfessorOaksSpeech.Count)
+            /// *** PROFESSOR OAKS INTRO SPEECH *** ///
+             string path = @"C:\Users\Ejer\Documents\ProfessorOak.txt";
+             List<string> ProfessorOaksSpeech = new List<string>(File.ReadAllLines(path, Encoding.UTF8));
+
+             int i = 0;
+             while (i < ProfessorOaksSpeech.Count)
+             {
+                 Console.WriteLine(ProfessorOaksSpeech[i]);
+                 i += 1;
+             }
+
+            /// *** ATTEMPT ON DATABASE CONNECTION FOR PROFESSOR OAKS INTRO SPEECH, BUT I CAN'T GET IT WORKING :( *** ///
+            /*string server = "localhost";
+            string database = "pokemon_profoak_intro";
+            string username = "root";
+            string password = "";
+            string query = "SELECT * FROM textintro";
+            MySqlConnection connection;
+            string connectionString = String.Format("server={0}; uid={2}; password={3}; database={1}; ", server, database, username, password);
+            
+            MySqlConnection msc = new MySqlConnection(connectionString);
+            connection = new MySqlConnection(connectionString);
+
+
+            List<string>[] list = new List<string>[1];
+            list[0] = new List<string>();
+            connection.Open();
+            MySqlCommand cmd = new MySqlCommand(query, connection);
+            MySqlDataReader dataReader = cmd.ExecuteReader();
+            while (dataReader.Read())
             {
-                Console.WriteLine(ProfessorOaksSpeech[i]);
-                i += 1;
+                list[0].Add(dataReader["oaksIntro"] + "");
             }
+            dataReader.Close();
+            connection.Close();
+            Console.WriteLine(list);*/
+            /// *** END OF DATABASE CONNECTION ATTEMPT *** ///
 
+            /// *** CHOOSE YOUR STARTING POKÉMON *** ///
             Console.WriteLine("\nChoose Your Starter Pokémon!\n");
             Console.WriteLine("Bulbasaur | Charmander | Squirtle\n");
             string chooseStarter = Console.ReadLine();
             if (chooseStarter == "Bulbasaur".ToLower())
             {
                 Console.WriteLine("\nCongratulations You Chose Bulbasaur!");
+                MistysPokemon = new string[] {"Charmander"};
             }
             else if (chooseStarter == "Charmander".ToLower())
             {
                 Console.WriteLine("\nCongratulations You Chose Charmander!");
+                MistysPokemon = new string[] {"Squirtle"};
             }
             else if (chooseStarter == "Squirtle".ToLower())
             {
                 Console.WriteLine("\nCongratulations You Chose Squirtle!");
+                MistysPokemon = new string[] {"Bulbasaur"};
             }
+
+            /// *** INTRO FOR BATTLE *** ///
             Console.WriteLine("\nProf. Oak: OH look there's " + rival + " you need to battle her to start your adventure!");
             Console.WriteLine("\nDo You Want To Battle? Y/N");
-            string userInput = Console.ReadLine();
-            if (userInput == "Y".ToLower())
+            if (chooseStarter == "Bulbasaur".ToLower())
             {
-                if (chooseStarter == "Bulbasaur".ToLower())
-                {
-                    Console.WriteLine(rival + " Threw out Charmander");
-                    Console.WriteLine("\nFIGHT!!!\n");
-                    while(GetBattleForBulbasaur() == false)
-                    {
-                        Console.WriteLine("Professor Oak healed Bulbasaur, take up the battle again. Type 'Y'");
-                        userInput = Console.ReadLine();
-                    }                                       
-                }
-                else if (chooseStarter == "Charmander".ToLower())
-                {
-                    Console.WriteLine(rival + " Threw out Squirtle");
-                    Console.WriteLine("\nFIGHT!!!\n");
-                    while(GetBattleForBulbasaur() == false)
-                    {
-                        Console.WriteLine("Professor Oak healed Bulbasaur, take up the battle again. Type 'Y'");
-                        userInput = Console.ReadLine();
-                    }
-                }
-                else if (chooseStarter == "Squirtle".ToLower())
-                {
-                    Console.WriteLine(rival + " Threw out Charmander");
-                    Console.WriteLine("\nFIGHT!!!\n");
-                    while (GetBattleForBulbasaur() == false)
-                    {
-                        Console.WriteLine("Professor Oak healed Bulbasaur, take up the battle again. Type 'Y'");
-                        userInput = Console.ReadLine();
-                    }
-                }
+                ChoosenStarter();
+            }
+            else if (chooseStarter == "Charmander".ToLower())
+            {
+                ChoosenStarter();
+            }
+            else if (chooseStarter == "Squirtle".ToLower())
+            {
+                ChoosenStarter();
             }
             else
             {
@@ -129,19 +143,30 @@ namespace Pokémon
             }
         }
 
+        /// *** DISPLAY CHOICE MENU AND ACTIONS *** ///
         public static void Menu()
         {
             while (isRunning)
             {
                 DisplayMenu();
-
+   
                 var choice = Console.ReadLine();
                 while(Choice.All(n => n.Value != choice))
                 {
                     Console.WriteLine($"\nPlease type '{CatchWildPokemon}', '{BattleInLeagues}' or exit the game typing '{Exit}'.");
                     choice = Console.ReadLine();
                 }
-                if(choice == Exit)
+                if (choice == CatchWildPokemon)
+                {
+                    CatchPokemon cp = new CatchPokemon();
+                    cp.ChoiceCatchWildPokemon();
+                    
+                }
+                else if (choice == BattleInLeagues)
+                {
+                    RequirementsToBattleInLeagues();
+                }
+                else if(choice == Exit)
                 {
                     isRunning = false;
                 }
@@ -150,6 +175,8 @@ namespace Pokémon
 
         private static bool isRunning;
         private static bool battleInLeagues;
+
+        /// *** THE MENU *** ///
         private static void DisplayMenu()
         {
             Console.WriteLine("\nWhat do you want to do?\n");
@@ -159,48 +186,66 @@ namespace Pokémon
         }
         private static void RequirementsToBattleInLeagues()
         {
-            if(pokemonsInStorage < 6)
+            if(pokemonsInStorage.Length < 3)
             {
-                Console.WriteLine($"You need to catch {0} more Pokémons to battle");
+                Console.WriteLine($"You need to catch "+(3-pokemonsInStorage.Length)+" more Pokémons to battle");
             }
         }
-        public static class CatchPokemon
+
+
+        /// *** CHOICE CATCH WILD POKEMON ACTIONS *** ///
+        class CatchPokemon
         {
-            private static void CatchWildPokemonIntro()
+            public void CatchWildPokemonIntro()
             {
                 Console.WriteLine("\nIt's time to catch some wild Pokémon!");
                 Console.WriteLine("Let's walk around and explore this area.");
             }
-            private static void ChoiceCatchWildPokemon()
+
+            // This doesn´t fully work as it should, but i gave it a try
+            public void ChoiceCatchWildPokemon()
             {
                 CatchWildPokemonIntro();
                 Console.ReadKey();
 
                 Random rnd = new Random();
-                Enumerable.Repeat<Action>(() =>
+                int foundWildPokemon = rnd.Next(1, 1);
+                if (foundWildPokemon == 1)
                 {
-                    int foundWildPokemon = rnd.Next(1, 3);
-                    if (foundWildPokemon == 1)
+                    Console.WriteLine("\nYou Encountered A Wild " + GetRandomElementFromArray(spawnRandomPokemon));
+                    Console.WriteLine("\nCatch it by pressing 'A' on your keyboard");
+                    string buttonPressed = Console.ReadLine();
+                    if(buttonPressed == "A".ToLower())
                     {
-                        Console.WriteLine(GetRandomElementFromArray());
+                        IsCatchSuccessful();
+
+                        if(GetRandomElementFromArray(caughtORNot) == caughtORNot[0])
+                        {
+                            int i = 0;
+                            while (i < 1)
+                            {
+                                i += 1;
+                                Console.WriteLine($"You now have {pokemonsInStorage[1]} Pokémons in your storage");
+                            }
+                        }
                     }
-                }, 30).ToList().ForEach(x => x());
+                }
             }
         }
-        private static bool IsCatchSuccessful()
+        private static void IsCatchSuccessful()
         {
-            return new Random().Next(100) >= 50;
+            Console.WriteLine(GetRandomElementFromArray(caughtORNot));
         }
 
-        private static string GetRandomElementFromArray()
+        private static string GetRandomElementFromArray(string[] targetArray)
         {
             // Create a Random Object
             Random rnd = new Random();
             // Generate a random index less than the size of the array
-            int indexInArray = rnd.Next(spawnRandomPokemon.Length);
+            int indexInArray = rnd.Next(targetArray.Length);
 
             // Display result
-            return $"You Encountered A Wild {spawnRandomPokemon[indexInArray]}";
+            return $"{targetArray[indexInArray]}";
         }
 
         /// *** BATTLE SYSTEM *** ///
@@ -217,7 +262,7 @@ namespace Pokémon
             int opponentsPokemonAtkStat = rnd.Next(1, 60);
             int opponentsPokemonDefStat = rnd.Next(1, 40);
             int opponentsPokemonLvl = rnd.Next(1, 100);
-            // The Battle
+            // THE BATTLE
             if (yourPokemonAtkStat >= opponentsPokemonDefStat)
             {
                 Console.WriteLine("You defeated " + rival + "'s Pokémon, GOOD JOB!\n");
@@ -230,6 +275,22 @@ namespace Pokémon
                 Console.WriteLine("YOU LOST!\n");
                 return false;
             }
+        }
+
+        /// *** BATTLE FUNCTION *** ///
+        private static void ChoosenStarter()
+        {
+            string userInput = Console.ReadLine();
+            if (userInput == "Y".ToLower())
+            {
+                Console.WriteLine(rival + " Threw out " + GetRandomElementFromArray(MistysPokemon));
+                Console.WriteLine("\nFIGHT!!!\n");
+                while (GetBattleForBulbasaur() == false)
+                {
+                    Console.WriteLine("Professor Oak healed your Pokémon, take up the battle again. Type 'Y'");
+                    userInput = Console.ReadLine();
+                }
+            } 
         }
     }
 }
